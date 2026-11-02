@@ -173,3 +173,16 @@ class Mage(Character):
             # Fall back to base attack using equipment, and restore 5 mana
             super().attack(target)
             self.mana = min(self.mana + 5, self.mana_max)
+
+
+# Funcionality test for Warrior and Mage classes
+if __name__ == "__main__":
+    warrior = Warrior(name="Thor")
+    mage = Mage(name="Merlin")
+    print("Testing Warrior and Mage classes:")
+    print(warrior)
+    print(mage)
+            
+    # Test a mage attack
+    mage.attack(warrior)
+    print(f"After Mage attacks Warrior -> Warrior HP: {warrior.hp}, Mage Mana: {mage.mana}")
