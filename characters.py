@@ -1,91 +1,91 @@
 
-# Task 4
-
+# Task 1,3, and 4
 from items import Weapon
 
+
 class Character:
-    """
-    Represents a base character in the RPG game.
-    """
+    """Represents a character in the RPG"""
 
-    def __init__(self, name: str, hp_max: int = 100, damage: int = 10, weapon: Weapon = None) -> None:
+    def __init__(self, name: str, hp_max: int = 100, damage: int = 10, weapon: "Weapon" =  None) -> None:
         """
-        Initializes the Character instance.
+        Initialise the Character
 
-        Parameters:
-        ----------
-        name : str
-            The name of the character.
-        hp_max : int, optional
-            The maximum hit points (default is 100).
-        damage : int, optional
-            The default base damage dealt when attacking (default is 10).
-        weapon : Weapon, optional
-            An equipped weapon object used for damage calculations (default is None).
+        Args:
+            name (str): The name of the character.
+            hp_max (int): Max hit points (default = 100)
+            damage (int): Damage delt when character attacks (default = 10)
         """
         self.name = name
-        self._hp = hp_max  # Protected attribute for hit points
+        self._hp = hp_max  # Note: _hp indicated private attribute
         self.hp_max = hp_max
         self.damage = damage
-        self.weapon = weapon
+        self.weapon =  weapon
 
-    @property
-    def hp(self) -> int:
-        """Public read-only property to inspect HP safely."""
-        return self._hp
 
-    @property
-    def is_alive(self) -> bool:
-        """Read-only property that returns True if HP is greater than 0, False otherwise."""
-        return self._hp > 0
-
-    def take_damage(self, amount: int) -> None:
-        """
-        Reduces the character's HP by the specified amount, ensuring it doesn't drop below 0.
-
-        Parameters:
-        ----------
-        amount : int
-            The amount of damage taken.
-        """
-        self._hp -= amount
-        self._hp = max(self._hp, 0)
-
-    def heal(self, amount: int) -> None:
-        """
-        Increases the character's HP by the specified amount, up to hp_max.
-
-        Parameters:
-        ----------
-        amount : int
-            The amount of healing applied.
-        """
-        self._hp += amount
-        self._hp = min(self._hp, self.hp_max)
-
-    def attack(self, target: "Character") -> None:
-        """
-        Attacks a target character, dealing damage using an equipped weapon or base damage.
-
-        Parameters:
-        ----------
-        target : Character
-            The character object being attacked.
-        """
+    def attack(self, target) -> None:
+        """Attack and deal damage to target character"""
         if self.weapon is not None:
-            dealt_damage = self.weapon.roll_damage()
+            damage_dealt = self.weapon.roll_damage()
         else:
-            dealt_damage = self.damage
-
-        target.take_damage(dealt_damage)
+            damage_dealt  =  self.damage
+        target.take_damage(damage_dealt)
+        
 
     def introduce(self) -> None:
-        """Prints an introduction string for the character."""
+        """Creates string that introduces character"""
         print(f"Hi, my name is {self.name}!")
 
     def __repr__(self) -> str:
-        """Returns the official string representation of the Character."""
-        return f"<Character name={self.name} hp={self._hp} damage={self.damage}>"
+        """Representation of character object"""
+        return f"<Character name={self.name} hp={self.hp} damage={self.damage}>)"
+
+    def __str__(self) -> str:
+        """String representation of character object"""
+        return f"Character: {self.name} with {self.hp} HP and {self.damage} damage"
+
+    def  take_damage(self, damage:  int)  -> None:
+        """
+        Reduce the character's hit points by the specified damage amount.
+
+        Ensures HP does not drop below 0.
+
+        Parameters
+        ----------
+        damage : int
+            The amount of damage to deduct from the character's HP.
+        """
+        self._hp = max(0, self._hp - damage)
+
+    def heal(self, multiplier:float= 0.1)  ->  None:
+        """
+        Heal the character by a percentage of their maximum hit points.
+
+        Healing only occurs if the character is alive, and health cannot exceed hp_max.
+
+        Parameters
+        ----------
+        multiplier : float, optional
+            The proportion of hp_max to restore (default is 0.1, or 10%).
+        """
+        if self.is_alive:
+            self._hp = round(min(self._hp + self.hp_max  *  multiplier, self.hp_max))
+    
+    @property
+    def hp(self) -> int:
+        """Public read-only property to inspect HP without allowing direct, unsafe edits."""
+        return self._hp
+    @property
+    def  is_alive(self) -> bool:
+        """
+        Check whether the character is currently alive.
+
+        Returns
+        -------
+        bool
+            True if _hp is strictly greater than 0, False otherwise.
+        """
+        return self._hp > 0
+
 
 
 class Warrior(Character):
