@@ -48,3 +48,4 @@ class Dice:
             result = d20()  # Equivalent to d20.roll()
         """
         return self.roll()
+
